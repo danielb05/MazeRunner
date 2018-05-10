@@ -40,7 +40,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -183,10 +183,10 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     }
 
     private void initKeys() {
-        inputManager.addMapping("CharLeft", new KeyTrigger(KeyInput.KEY_A));
-        inputManager.addMapping("CharRight", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("CharForward", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("CharBackward", new KeyTrigger(KeyInput.KEY_S));
+        inputManager.addMapping("CharLeft", new KeyTrigger(KeyInput.KEY_LEFT));
+        inputManager.addMapping("CharRight", new KeyTrigger(KeyInput.KEY_RIGHT));
+        inputManager.addMapping("CharForward", new KeyTrigger(KeyInput.KEY_UP));
+        inputManager.addMapping("CharBackward", new KeyTrigger(KeyInput.KEY_DOWN));
 
         inputManager.addListener(this, "CharLeft", "CharRight");
         inputManager.addListener(this, "CharForward", "CharBackward");
@@ -198,10 +198,10 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
             for (int j = 0; j < mat[0].length; j++) {
 
                 if (mat[i][j] == 1) {
-                    Box boxMesh = new Box(1f, 1f, 1f);
+                    Box boxMesh = new Box(1f, 2f, 1f);
                     Geometry boxGeo = new Geometry("Bloco", boxMesh);
                     Material boxMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    Texture monkeyTex = assetManager.loadTexture("Textures/pedra.jpg");
+                    Texture monkeyTex = assetManager.loadTexture("Textures/wall.jpg");
                     boxMat.setTexture("ColorMap", monkeyTex);
                     boxGeo.setMaterial(boxMat);
                     rootNode.attachChild(boxGeo);
