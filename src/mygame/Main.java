@@ -20,10 +20,9 @@ import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
 
 /**
- * This is the Main Class of your Game. You should only do initialization here.
- * Move your Logic into AppStates or Controls
  *
- * @author normenhansen
+ * @author Emanuel(150329) e Daniel(132118) *
+ *
  */
 public class Main extends SimpleApplication implements ActionListener, PhysicsCollisionListener{
 
