@@ -20,11 +20,8 @@ import com.jme3.scene.control.CameraControl;
 
 /**
  *
- * @author Abutua
+ * @authors Emanuel(150329) e Daniel(132118) *
  *
- *
- * Ver:
- * https://wiki.jmonkeyengine.org/doku.php/jme3:advanced:making_the_camera_follow_a_character
  */
 public class PlayerCameraNode extends Node {
 
