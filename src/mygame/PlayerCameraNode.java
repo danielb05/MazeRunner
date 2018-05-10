@@ -101,8 +101,6 @@ public class PlayerCameraNode extends Node {
         viewDirection.set(camDir);
         walkDirection.set(0, 0, 0);
 
-        walkDirection.addLocal(camDir.mult(3));
-
         if (up) {
             walkDirection.addLocal(camDir.mult(3));
         } else if (down) {
@@ -123,8 +121,4 @@ public class PlayerCameraNode extends Node {
         upDateAnimationPlayer();
 
     }
-
-   
-  
-
 }
