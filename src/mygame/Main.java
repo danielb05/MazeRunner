@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
@@ -29,8 +30,8 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     private PlayerCameraNode player;
     private boolean up = false, down = false, left = false, right = false;
     private BulletAppState state;
-    private Node ducks = new Node();
-    private int totalDucks = 0, totalItens=0;
+    private Node cars = new Node();
+    private int totalCars = 0, totalItens=0;
 
     //0 -> Livre
     //1 -> Bloco com corpo rígido
@@ -40,7 +41,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -90,7 +91,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
 
     @Override
     public void simpleInitApp() {
-        rootNode.attachChild(ducks);
+        rootNode.attachChild(cars);
         createPhisics();
         createFloor();
         createLight();
@@ -103,10 +104,10 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     public void simpleUpdate(float tpf) {
         player.upDateKeys(tpf, up, down, left, right);
         
-        for(Spatial d : ducks.getChildren())
+        for(Spatial d : cars.getChildren())
             d.rotate(0, tpf, 0);
   
-        if(totalItens == totalDucks){
+        if(totalItens == totalCars){
             restartGame();
         }
     }
@@ -218,7 +219,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
                 {
                     if(mat[i][j] == 2){
                        createPrize(new Vector3f(-40+i*2,1,-40+j*2));
-                       totalDucks++;
+                       totalCars++;
                     }
                     if(mat[i][j]==3){
                        createPlayer(new Vector3f(-40+i*2,1,-40+j*2));
@@ -231,23 +232,66 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     }
 
     private void createPrize(Vector3f posicao) {
-        Spatial duck = assetManager.loadModel("Models/Duck.gltf");
-        duck.setName("duck");
-        duck.setLocalTranslation(posicao);
-        Material defaultMat = new Material( assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
-        duck.setMaterial(defaultMat);
-        ducks.attachChild(duck);
+        Spatial car = assetManager.loadModel("Models/Car.mesh.xml");
+        car.setName("car");
+        car.setLocalTranslation(posicao);
+   
+        createWheels(posicao);
+        cars.attachChild(car);
         
         RigidBodyControl r = new RigidBodyControl(0);
-        duck.addControl(r);
-        state.getPhysicsSpace().add(r);       
+        car.addControl(r);
+        state.getPhysicsSpace().add(r);               
+    }
+    
+    private void createWheels(Vector3f posicao) {
+        
+        float x = -0.42f;
+        //Material defaultMat = new Material( assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        Material defaultMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        defaultMat.setBoolean("UseMaterialColors", true);
+        defaultMat.setColor("Ambient", ColorRGBA.Black);
+        defaultMat.setColor("Diffuse", ColorRGBA.Black);
         
         
+        posicao.add(10f, 0f, 0f);
+        Spatial wheel1 = assetManager.loadModel("Models/WheelBackLeft.mesh.xml");
+        wheel1.setName("wheel1");
+        wheel1.setLocalTranslation(posicao);
+        wheel1.rotate(0, x, 0);
+        wheel1.setMaterial(defaultMat);
+        cars.attachChild(wheel1);
+        
+        posicao.add(0f, 0.5f, 0f);
+        Spatial wheel2 = assetManager.loadModel("Models/WheelBackRight.mesh.xml");
+        wheel2.setName("wheel2");
+        wheel2.setLocalTranslation(posicao);
+        wheel2.rotate(0, x, 0);
+        wheel2.setMaterial(defaultMat);
+        cars.attachChild(wheel2);
+        
+        posicao.add(-10f, 0f, 0f);
+        Spatial wheel3 = assetManager.loadModel("Models/WheelFrontLeft.mesh.xml");
+        wheel3.setName("wheel3");
+        wheel3.setLocalTranslation(posicao);
+        wheel3.rotate(0, x, 0);
+        wheel3.setMaterial(defaultMat);
+        cars.attachChild(wheel3);
+        
+        posicao.add(0f, -0.5f, 0f);
+        Spatial wheel4 = assetManager.loadModel("Models/WheelFrontRight.mesh.xml");
+        wheel4.setName("wheel4");
+        wheel4.setLocalTranslation(posicao);
+        wheel4.rotate(0, x, 0);
+        wheel4.setMaterial(defaultMat);
+        cars.attachChild(wheel4);
+
+           
     }
 
     private void restartGame() {
        totalItens=0;
-       totalDucks=0;
+       totalCars=0;
        
         
        
@@ -256,7 +300,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
 
                     if(mat[i][j] == 2){
                        createPrize(new Vector3f(-40+i*2,1,-40+j*2));
-                       totalDucks++;
+                       totalCars++;
                     }
                   
                     
@@ -281,20 +325,20 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         Spatial nodeA = event.getNodeA();
         Spatial nodeB = event.getNodeB();
               
-        if(nodeA.getName().equals("duck"))
+        if(nodeA.getName().equals("car"))
         {
-            if(ducks.getChildIndex(nodeA) != -1){
+            if(cars.getChildIndex(nodeA) != -1){
              state.getPhysicsSpace().remove(nodeA);
-             ducks.detachChild(nodeA);
+             cars.detachChild(nodeA);
              totalItens++;
             
             }
         }
         else{
-         if(nodeB.getName().equals("duck")){
-             if(ducks.getChildIndex(nodeB) != -1){
+         if(nodeB.getName().equals("car")){
+             if(cars.getChildIndex(nodeB) != -1){
              state.getPhysicsSpace().remove(nodeB);
-             ducks.detachChild(nodeB);
+             cars.detachChild(nodeB);
              totalItens++;
              }
          }
