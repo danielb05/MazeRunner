@@ -43,7 +43,7 @@ public class PlayerCameraNode extends Node {
         super.setLocalTranslation(posicao);
         super.attachChild(oto);
 
-        physicsCharacter = new BetterCharacterControl(1, 2.5f, 16f);
+        physicsCharacter = new BetterCharacterControl(0.9f, 2.5f, 16f);
 
         super.addControl(physicsCharacter);
 
