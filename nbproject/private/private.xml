@@ -3,9 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Daniel/Documents/FACENS/7º%20Semestre/computacao%20grafica%202/MazeRunner/src/mygame/Main.java</file>
             <file>file:/C:/Users/Daniel/Documents/FACENS/7º%20Semestre/computacao%20grafica%202/MazeRunner/src/mygame/PlayerCameraNode.java</file>
             <file>file:/C:/Users/Daniel/Documents/FACENS/7º%20Semestre/computacao%20grafica%202/MazeRunner/src/mygame/Prize.java</file>
+=======
+            <file>file:/home/emanuel/Projects/MazeRunner/src/mygame/PlayerCameraNode.java</file>
+            <file>file:/home/emanuel/Projects/MazeRunner/src/mygame/Main.java</file>
+>>>>>>> 920dc1dc66b4c8956822170cc3a4af5c26d88f6a
         </group>
     </open-files>
 </project-private>
