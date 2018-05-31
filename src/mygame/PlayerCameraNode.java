@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mygame;
 
 import com.jme3.animation.AnimChannel;
@@ -19,12 +15,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 
 /**
- *
-<<<<<<< HEAD
  * @authors Emanuel(150329) e Daniel(132118) *
-=======
- * @author Emanuel(150329) e Daniel(132118) *
->>>>>>> d407161d7ccdc9f896252902514d223d2491b891
  *
  */
 public class PlayerCameraNode extends Node {

@@ -29,7 +29,7 @@ import java.util.Queue;
  * @authors Emanuel(150329) e Daniel(132118) *
  *
  */
-public class Main extends SimpleApplication implements ActionListener, PhysicsCollisionListener{
+public class Main extends SimpleApplication implements ActionListener, PhysicsCollisionListener {
 
     private PlayerCameraNode player;
     private boolean up = false, down = false, left = false, right = false;
@@ -40,54 +40,55 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     //1 -> Bloco com corpo rígido
     //2 -> Item
     //3 -> Player
+    int mat[][] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 0, 3, 0, 2, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1},
+    {1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1},
+    {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1},
+    {1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1},
+    {1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1},
+    {1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1},
+    {1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1},
+    {1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+    {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1},
+    {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1},
+    {1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
+    {1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+    {1, 2, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1},
+    {1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1},
+    {1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1},
+    {1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1},
+    {1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1},
+    {1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1},
+    {1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1},
+    {1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1},
+    {1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1},
+    {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1},
+    {1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1},
+    {1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1},
+    {1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
+    {1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1},
+    {1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1},
+    {1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1},
+    {1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1},
+    {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1},
+    {1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1},
+    {1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+    {1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1},
+    {1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-    int mat[][] = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                   {1,0,3,0,1,0,1,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,1,1,0,0,0,1,0,1,0,1,0,1,1,0,0,1,0,1},
-                   {1,0,1,0,0,0,0,1,0,0,1,1,1,1,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,1,0,0,1,0,0,1,1,0,0,1},
-                   {1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,1,0,0,1,0,0,1,1,0,0,1,0,1,0,0,1,1,1,0,1,1},
-                   {1,0,1,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1,0,0,1,1,0,1,0,1,1,0,0,1,1,0,1,0,1,0,1,0,1},
-                   {1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,1,0,1,1,1,0,1},
-                   {1,0,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,0,1,1,1},
-                   {1,0,1,1,0,1,0,1,1,0,0,1,1,0,0,0,1,1,0,0,0,1,0,0,0,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1},
-                   {1,0,0,1,1,0,0,0,0,1,0,0,1,0,0,0,1,1,1,1,0,0,1,1,1,1,0,1,0,1,1,0,0,1,0,1,0,0,0,1},
-                   {1,0,0,0,1,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,1,0,1,0,1,1,0,1,1,1,1,0,1,0,0,0,0,0,1},
-                   {1,0,1,0,0,0,1,0,1,0,0,0,0,1,1,1,1,1,1,0,0,0,1,0,1,0,0,1,1,0,0,0,0,0,1,0,0,1,0,1},
-                   {1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,1,1,0,0,0,1,0,1,0,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,1},
-                   {1,0,0,0,1,0,1,0,1,0,0,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,1},
-                   {1,0,0,0,1,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,1,0,1,0,1,0,0,1,0,1},
-                   {1,0,1,0,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
-                   {1,0,1,0,0,0,0,1,1,0,1,0,0,1,1,1,1,0,1,0,1,1,0,1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,0,1},
-                   {1,2,0,0,1,0,0,0,1,0,1,1,0,0,1,1,1,1,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,1},
-                   {1,0,0,0,1,1,0,1,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,1,0,0,0,1,0,0,1,1,1,0,1,1,1,1,1,1},
-                   {1,1,1,1,1,1,0,1,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,0,1,0,1,1,0,0,0,0,1,1},
-                   {1,0,1,1,1,1,0,0,0,0,0,1,0,0,0,0,1,0,1,0,1,0,0,1,1,1,0,0,0,1,0,0,1,1,0,0,0,0,1,1},
-                   {1,0,0,0,1,1,0,0,1,1,1,0,0,1,1,0,1,0,1,0,0,0,0,1,0,0,1,1,1,0,0,0,1,0,1,0,1,1,0,1},
-                   {1,0,0,0,1,1,1,1,1,1,0,1,0,0,1,0,1,1,1,1,0,0,0,1,1,1,0,0,1,0,0,1,1,1,0,0,1,1,0,1},
-                   {1,1,1,1,0,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0,0,0,0,1,0,1,0,0,1,1,1,1,1,1,0,0,1},
-                   {1,0,1,1,1,1,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,1,0,1,1,0,1,1,0,1,0,1,0,1,1,1},
-                   {1,0,1,1,1,1,0,1,1,0,0,1,0,0,1,1,1,1,1,0,1,0,1,0,1,0,0,1,1,0,0,0,0,1,0,0,1,0,0,1},
-                   {1,0,1,1,0,1,0,0,0,0,1,1,0,0,1,1,1,0,0,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1},
-                   {1,0,0,1,0,0,1,0,0,1,1,1,1,1,1,0,1,0,1,1,0,1,1,0,1,1,0,0,1,0,0,0,0,0,1,0,0,1,1,1},
-                   {1,1,0,0,0,0,1,1,1,1,0,0,0,1,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,1},
-                   {1,1,0,1,1,1,0,0,0,0,0,1,0,0,1,0,1,1,0,0,0,1,0,1,1,0,1,0,1,0,0,0,0,0,0,1,1,1,0,1},
-                   {1,0,0,0,0,1,1,0,1,0,0,0,0,0,1,0,1,0,0,1,1,1,1,0,1,1,1,0,0,1,0,1,1,0,0,0,1,1,0,1},
-                   {1,0,0,0,0,1,1,0,1,0,0,1,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,1,1,0,0,1,0,1},
-                   {1,1,0,0,1,0,1,0,1,1,0,1,0,0,1,1,0,0,1,1,1,0,1,0,0,1,0,1,0,1,0,0,1,0,0,0,1,0,0,1},
-                   {1,0,1,0,1,0,0,0,0,0,0,1,1,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,1,1,0,0,1,1,0,1,1,0,0,1},
-                   {1,1,1,0,0,0,1,0,1,1,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,0,0,0,1,1,1,1,0,1,0,0,1,1,1},
-                   {1,0,0,1,0,0,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,0,1,0,1,1,0,0,1,1},
-                   {1,0,0,1,0,1,0,0,1,0,1,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0,1,0,0,1,0,0,0,0,1,1,1,0,0,1},
-                   {1,0,1,0,1,0,1,1,0,1,0,1,0,0,0,0,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,0,0,0,1,0,0,1,0,1},
-                   {1,1,1,1,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0,0,0,0,0,0,1,0,1,0,0,1},
-                   {1,0,1,0,1,1,0,0,0,0,1,0,1,1,0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,1,1,0,1},
-                   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};;
+    ;
 
     public static void main(String[] args) {
         Main app = new Main();
         app.setShowSettings(false);
         app.start();
 
-    }    
+    }
 
     @Override
     public void simpleInitApp() {
@@ -97,79 +98,78 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         createLight();
         createWalls();
         initKeys();
-        
+
+        state.setDebugEnabled(true);
         System.out.println(breadthFirstSearch(1, 2));
     }
-    
-    private boolean breadthFirstSearch(int bi, int bj)
-    {
+
+    private boolean breadthFirstSearch(int bi, int bj) {
         SimpleEntry begin = new SimpleEntry(bi, bj);
         ArrayList<SimpleEntry> visiteds = new ArrayList<>();
         Queue<SimpleEntry> Q = new LinkedList();
-        
+
         Q.add(begin);
-        
-        while (Q.size() > 0)
-        {
+
+        while (Q.size() > 0) {
             SimpleEntry actual = Q.remove();
             System.out.println(actual);
             visiteds.add(actual);
-            
-            if (mat[(int)actual.getKey()][(int)actual.getValue()] == 2) {
+
+            if (mat[(int) actual.getKey()][(int) actual.getValue()] == 2) {
                 // End search
                 return true;
             }
-            
-            if ((int)actual.getKey() + 1 < mat.length && 
-                    !isVisited(visiteds, (int)actual.getKey() + 1, (int)actual.getValue()) && 
-                    mat[(int)actual.getKey() + 1][(int)actual.getValue()] != 1) {
-                
-                Q.add(new SimpleEntry((int)actual.getKey() + 1, (int)actual.getValue()));
-                
+
+            if ((int) actual.getKey() + 1 < mat.length
+                    && !isVisited(visiteds, (int) actual.getKey() + 1, (int) actual.getValue())
+                    && mat[(int) actual.getKey() + 1][(int) actual.getValue()] != 1) {
+
+                Q.add(new SimpleEntry((int) actual.getKey() + 1, (int) actual.getValue()));
+
             }
-            
-            if ((int)actual.getKey() - 1 >= 0 && 
-                    !isVisited(visiteds, (int)actual.getKey() - 1, (int)actual.getValue()) && 
-                    mat[(int)actual.getKey() - 1][(int)actual.getValue()] != 1) {
-                
-                Q.add(new SimpleEntry((int)actual.getKey() - 1, (int)actual.getValue()));
-                
+
+            if ((int) actual.getKey() - 1 >= 0
+                    && !isVisited(visiteds, (int) actual.getKey() - 1, (int) actual.getValue())
+                    && mat[(int) actual.getKey() - 1][(int) actual.getValue()] != 1) {
+
+                Q.add(new SimpleEntry((int) actual.getKey() - 1, (int) actual.getValue()));
+
             }
-            
-            if ((int)actual.getValue() + 1 < mat.length && 
-                    !isVisited(visiteds, (int)actual.getKey(), (int)actual.getValue() + 1) && 
-                    mat[(int)actual.getKey()][(int)actual.getValue() + 1] != 1) {
-                
-                Q.add(new SimpleEntry((int)actual.getKey(), (int)actual.getValue() + 1));
-                
+
+            if ((int) actual.getValue() + 1 < mat.length
+                    && !isVisited(visiteds, (int) actual.getKey(), (int) actual.getValue() + 1)
+                    && mat[(int) actual.getKey()][(int) actual.getValue() + 1] != 1) {
+
+                Q.add(new SimpleEntry((int) actual.getKey(), (int) actual.getValue() + 1));
+
             }
-            
-            if ((int)actual.getValue() - 1 >= 0 && 
-                    !isVisited(visiteds, (int)actual.getKey(), (int)actual.getValue() - 1) && 
-                    mat[(int)actual.getKey()][(int)actual.getValue() - 1] != 1) {
-                
-                Q.add(new SimpleEntry((int)actual.getKey(), (int)actual.getValue() - 1));
-                
+
+            if ((int) actual.getValue() - 1 >= 0
+                    && !isVisited(visiteds, (int) actual.getKey(), (int) actual.getValue() - 1)
+                    && mat[(int) actual.getKey()][(int) actual.getValue() - 1] != 1) {
+
+                Q.add(new SimpleEntry((int) actual.getKey(), (int) actual.getValue() - 1));
+
             }
         }
-        
+
         return false;
     }
-    
-    private boolean isVisited(ArrayList<SimpleEntry> lst, int begin, int end)
-    {
+
+    private boolean isVisited(ArrayList<SimpleEntry> lst, int begin, int end) {
         for (SimpleEntry e : lst) {
-            if ((int)e.getKey() == begin && (int)e.getValue() == end)
+            if ((int) e.getKey() == begin && (int) e.getValue() == end) {
                 return true;
+            }
         }
-        
+
         return false;
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         player.upDateKeys(tpf, up, down, left, right);
-        
+
 //        prize.getCarNode().rotate(0, tpf, 0);
 //        prize.getCarNode().getChild("car").rotate(0, tpf, 0);
     }
@@ -212,7 +212,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     }
 
     private void createPlayer(Vector3f posicao) {
-        player = new PlayerCameraNode("player", assetManager, state, cam,posicao);
+        player = new PlayerCameraNode("player", assetManager, state, cam, posicao);
         rootNode.attachChild(player);
         flyCam.setEnabled(true);
     }
@@ -244,62 +244,56 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
                     RigidBodyControl r = new RigidBodyControl(0);
                     boxGeo.addControl(r);
 
-                    boxGeo.move(-40+i*2,1,-40+j*2);
+                    boxGeo.move(-40 + i * 2, 1, -40 + j * 2);
                     r.setPhysicsLocation(boxGeo.getLocalTranslation());
 
                     state.getPhysicsSpace().add(r);
-                }
-                else
-                {
-                    if(mat[i][j] == 2){
-                       createPrize(new Vector3f(-40+i*2,1,-40+j*2));
-                       //totalCars++;
+                } else {
+                    if (mat[i][j] == 2) {
+                        createPrize(new Vector3f(-40 + i * 2, 1, -40 + j * 2));
+                        //totalCars++;
                     }
-                    if(mat[i][j]==3){
-                       createPlayer(new Vector3f(-40+i*2,1,-40+j*2));
+                    if (mat[i][j] == 3) {
+                        createPlayer(new Vector3f(-40 + i * 2, 1, -40 + j * 2));
                     }
                 }
             }
         }
-        
 
     }
 
     private void createPrize(Vector3f posicao) {
         prize = new Prize("car", assetManager, posicao);
-        
+
         RigidBodyControl r = new RigidBodyControl(0);
-        prize.addControl(r);
-        state.getPhysicsSpace().add(r);     
-        
+        prize.getCarNode().getChild("car").addControl(r);
+        state.getPhysicsSpace().add(r);
+
         rootNode.attachChild(prize.getCarNode());
     }
 
     private void restartGame() {
-       //totalItens=0;
-       //totalCars=0;
-       
-        
-       
-       for (int i = 0; i < mat.length; i++) {
+        //totalItens=0;
+        //totalCars=0;
+
+        for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[0].length; j++) {
 
-                    if(mat[i][j] == 2){
-                       createPrize(new Vector3f(-40+i*2,1,-40+j*2));
-                       //totalCars++;
-                    }
-                  
-                    
+                if (mat[i][j] == 2) {
+                    createPrize(new Vector3f(-40 + i * 2, 1, -40 + j * 2));
+                    //totalCars++;
+                }
+
             }
         }
     }
-    
+
     private void createPhisics() {
         state = new BulletAppState();
         stateManager.attach(state);
         state.getPhysicsSpace().addCollisionListener(this);
     }
-    
+
     private void createLight() {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-10.5f, -15f, -10.5f)).normalizeLocal());
@@ -312,10 +306,10 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         rootNode.addLight(sun2);
 
     }
-    
-        @Override
+
+    @Override
     public void simpleRender(RenderManager rm) {
-   
+
     }
 
     private void createFloor() {
@@ -334,33 +328,25 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         state.getPhysicsSpace().add(r);
 
     }
-    
+
     @Override
     public void collision(PhysicsCollisionEvent event) {
         Spatial nodeA = event.getNodeA();
         Spatial nodeB = event.getNodeB();
-        
+
         nodeB = event.getNodeB();
-              
-//        if(nodeA.getName().equals("car"))
-//        {
-//            if(cars.getChildIndex(nodeA) != -1){
-//             state.getPhysicsSpace().remove(nodeA);
-//             cars.detachChild(nodeA);
-//             totalItens++;
-//            
-//            }
-//        }
-//        else{
-//         if(nodeB.getName().equals("car")){
-//             if(cars.getChildIndex(nodeB) != -1){
-//             state.getPhysicsSpace().remove(nodeB);
-//             cars.detachChild(nodeB);
-//             totalItens++;
-//             }
-//         }
-//        }
-        
+
+        if (nodeA.getName().equals("player") && nodeB.getName().equals("car")) {
+            rootNode.detachChildNamed("carNode");
+            state.getPhysicsSpace().remove(nodeB);
+            //restartGame();
+
+        } else if (nodeB.getName().equals("player") && nodeA.getName().equals("car")) {
+            rootNode.detachChildNamed("carNode");
+            state.getPhysicsSpace().remove(nodeA);
+            //restartGame();
+        }
+
     }
 
 }
