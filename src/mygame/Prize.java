@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 /**
  *
- * @authors Emanuel(150329) e Daniel(132118) *
+ * @authors Emanuel(150329) e Daniel(132118) 
  *
  */
 public class Prize extends Node {
