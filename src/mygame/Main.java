@@ -6,12 +6,14 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -36,6 +38,10 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     private boolean up = false, down = false, left = false, right = false;
     private BulletAppState state;
     private Prize prize;
+    private Vector3f player_pos;
+    private int timer = 0;
+    DirectionalLight sun;
+            DirectionalLight sun2;
 
     //0 -> Livre
     //1 -> Bloco com corpo rígido
@@ -65,7 +71,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         createLight();
         createWalls();
         initKeys();     
-        
+       
     }
     
     private int[][] generateMaze(int size)
@@ -198,24 +204,6 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
                    {1,1,1,1,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0,0,0,0,0,0,1,0,1,0,0,1},
                    {1,0,1,0,1,1,0,0,0,0,1,0,1,1,0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,1,1,0,1},
                    {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1}};
-        
-        //        
-//        int m[][] = new int[size][size];
-//        
-//        for (int i = 0;i < size;++i) {
-//            for (int j = 0; j < size; ++j) {
-//                if (i == 0 || j == 0 || i == size -1 || j == size - 1)
-//                    m[i][j] = 1;
-//                else if (j == size - 2 || i == 1)
-//                    m[i][j] = 0;
-//                else
-//                    m[i][j] = r.nextBoolean() ? 1 : 0;
-//            }
-//        }
-////        
-//        m[player_x][player_y] = 3;
-//        
-//        m[r.nextBoolean() ? size - 1 : 0][(Math.abs(r.nextInt())) % size] = 2;
                 
         return ops[Math.abs(r.nextInt() % 3)];
     }
@@ -286,9 +274,10 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     @Override
     public void simpleUpdate(float tpf) {
         player.upDateKeys(tpf, up, down, left, right);
-
-//        prize.getCarNode().rotate(0, tpf, 0);
-//        prize.getCarNode().getChild("car").rotate(0, tpf, 0);
+        
+        if (timer++ == 100) {
+            guiNode.getChildren().clear();
+        }
     }
 
     @Override
@@ -371,6 +360,7 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
                         //totalCars++;
                     }
                     if (mat[i][j] == 3) {
+                        player_pos = new Vector3f(-40 + i * 2, 1, -40 + j * 2);
                         createPlayer(new Vector3f(-40 + i * 2, 1, -40 + j * 2));
                     }
                 }
@@ -393,16 +383,25 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         //totalItens=0;
         //totalCars=0;
 
-        for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[0].length; j++) {
+        guiNode.detachAllChildren();
+        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText helloText = new BitmapText(guiFont, false);
+        helloText.setSize(guiFont.getCharSet().getRenderedSize() * 3);
+        helloText.setText("Você ganhou!");
+        helloText.setLocalTranslation(this.settings.getWidth() / 2 - helloText.getSize() * 2.5f, 
+                                      helloText.getLineHeight() + this.settings.getHeight() / 2, 0);
+        guiNode.attachChild(helloText);
+        
+        rootNode.getChildren().clear();
+        rootNode.detachAllChildren();
+        rootNode.removeLight(sun);
+        rootNode.removeLight(sun2);
+        timer = 0;
+        player = null;
+        simpleInitApp();
 
-                if (mat[i][j] == 2) {
-                    createPrize(new Vector3f(-40 + i * 2, 1, -40 + j * 2));
-                    //totalCars++;
-                }
+//        main(null);
 
-            }
-        }
     }
 
     private void createPhisics() {
@@ -412,12 +411,12 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     }
 
     private void createLight() {
-        DirectionalLight sun = new DirectionalLight();
+        sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-10.5f, -15f, -10.5f)).normalizeLocal());
         sun.setColor(ColorRGBA.White);
         rootNode.addLight(sun);
 
-        DirectionalLight sun2 = new DirectionalLight();
+        sun2 = new DirectionalLight();
         sun2.setDirection((new Vector3f(10.5f, -15f, 10.5f)).normalizeLocal());
         sun2.setColor(ColorRGBA.White);
         rootNode.addLight(sun2);
@@ -456,12 +455,12 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         if (nodeA.getName().equals("player") && nodeB.getName().equals("car")) {
             rootNode.detachChildNamed("carNode");
             state.getPhysicsSpace().remove(nodeB);
-            //restartGame();
+            restartGame();
 
         } else if (nodeB.getName().equals("player") && nodeA.getName().equals("car")) {
             rootNode.detachChildNamed("carNode");
             state.getPhysicsSpace().remove(nodeA);
-            //restartGame();
+            restartGame();
         }
 
     }
