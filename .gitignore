@@ -1,5 +1,5 @@
-nbproject/
-build/
+nbproject/*
+build/*
 *.so
 *.dll
 *.class
