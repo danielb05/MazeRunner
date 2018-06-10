@@ -35,15 +35,15 @@ import java.util.Random;
 public class Main extends SimpleApplication implements ActionListener, PhysicsCollisionListener {
 
     private PlayerCameraNode player;
-    private boolean up = false, down = false, left = false, right = false;
+    private boolean up = false, down = false, left = false, right = false, replay = false;
     private BulletAppState state;
     private Prize prize;
     private Vector3f player_pos;
     private int timer = 0;
     DirectionalLight sun;
-            DirectionalLight sun2;
-
+    DirectionalLight sun2;
     int mat[][];
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.setShowSettings(false);
@@ -55,26 +55,43 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
 
     @Override
     public void simpleInitApp() {
-        mat = generateMaze(40);
-        int cont = 1;
         
-        while (!breadthFirstSearch(1, 2))
+        if(!replay)
         {
-            mat = generateMaze(40);
-            System.out.println("Iteration: " + ++cont);
+            initKeys();  
+            createLight();
         }
+        mat = generateMaze(40);
+
         createPhisics();
         createFloor();
-        createLight();
-        createWalls();
-        initKeys();     
+        createWalls();          
        
     }
     
     private int[][] generateMaze(int size)
     {
-        
+        int cont = 0;
+                
         Maze maze = new Maze();
+        
+        //testano se os labirintos possuem solução
+        if(!replay)
+        {
+            System.out.println("Por favor, aguarde um momento, estamos gerando o Labirinto");
+            for(cont = 0; cont<3; cont++)
+            {
+                maze.generate(cont);
+                if(maze.breadthFirstSearch(1, 2))
+                {
+                    System.out.println("Tudo OK!!! Labirinto: " + cont + " possui solução!");
+                }
+                else
+                {
+                    System.out.println("Erro!!! Labirinto: " + cont + " não possui solução!");
+                }
+            }
+        }
         
         Random r = new Random();
         
@@ -82,69 +99,6 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
         
         return maze.getMaze();
 
-    }
-
-    private boolean breadthFirstSearch(int bi, int bj) {
-        SimpleEntry begin = new SimpleEntry(bi, bj);
-        ArrayList<SimpleEntry> visiteds = new ArrayList<>();
-        Queue<SimpleEntry> Q = new LinkedList();
-
-        Q.add(begin);
-
-        while (Q.size() > 0) {
-            SimpleEntry actual = Q.remove();
-            //System.out.println(actual);
-            visiteds.add(actual);
-
-            if (mat[(int) actual.getKey()][(int) actual.getValue()] == 2) {
-                // End search
-                return true;
-            }
-
-            if ((int) actual.getKey() + 1 < mat.length
-                    && !isVisited(visiteds, (int) actual.getKey() + 1, (int) actual.getValue())
-                    && mat[(int) actual.getKey() + 1][(int) actual.getValue()] != 1) {
-
-                Q.add(new SimpleEntry((int) actual.getKey() + 1, (int) actual.getValue()));
-
-            }
-
-            if ((int) actual.getKey() - 1 >= 0
-                    && !isVisited(visiteds, (int) actual.getKey() - 1, (int) actual.getValue())
-                    && mat[(int) actual.getKey() - 1][(int) actual.getValue()] != 1) {
-
-                Q.add(new SimpleEntry((int) actual.getKey() - 1, (int) actual.getValue()));
-
-            }
-
-            if ((int) actual.getValue() + 1 < mat.length
-                    && !isVisited(visiteds, (int) actual.getKey(), (int) actual.getValue() + 1)
-                    && mat[(int) actual.getKey()][(int) actual.getValue() + 1] != 1) {
-
-                Q.add(new SimpleEntry((int) actual.getKey(), (int) actual.getValue() + 1));
-
-            }
-
-            if ((int) actual.getValue() - 1 >= 0
-                    && !isVisited(visiteds, (int) actual.getKey(), (int) actual.getValue() - 1)
-                    && mat[(int) actual.getKey()][(int) actual.getValue() - 1] != 1) {
-
-                Q.add(new SimpleEntry((int) actual.getKey(), (int) actual.getValue() - 1));
-
-            }
-        }
-
-        return false;
-    }
-
-    private boolean isVisited(ArrayList<SimpleEntry> lst, int begin, int end) {
-        for (SimpleEntry e : lst) {
-            if ((int) e.getKey() == begin && (int) e.getValue() == end) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
@@ -233,7 +187,6 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
                 } else {
                     if (mat[i][j] == 2) {
                         createPrize(new Vector3f(-40 + i * 2, 1, -40 + j * 2));
-                        //totalCars++;
                     }
                     if (mat[i][j] == 3) {
                         player_pos = new Vector3f(-40 + i * 2, 1, -40 + j * 2);
@@ -256,30 +209,28 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     }
 
     private void restartGame() {
-        //totalItens=0;
-        //totalCars=0;
-
+        
         guiNode.detachAllChildren();
+        replay = true;
+        showMessage();
+        rootNode.getChildren().clear();
+        rootNode.detachAllChildren();
+        timer = 0;
+        player = null;
+        simpleInitApp();
+        
+    }
+
+    private void showMessage(){
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText helloText = new BitmapText(guiFont, false);
         helloText.setSize(guiFont.getCharSet().getRenderedSize() * 3);
         helloText.setText("Você ganhou!");
         helloText.setLocalTranslation(this.settings.getWidth() / 2 - helloText.getSize() * 2.5f, 
-                                      helloText.getLineHeight() + this.settings.getHeight() / 2, 0);
+        helloText.getLineHeight() + this.settings.getHeight() / 2, 0);
         guiNode.attachChild(helloText);
-        
-        rootNode.getChildren().clear();
-        rootNode.detachAllChildren();
-        rootNode.removeLight(sun);
-        rootNode.removeLight(sun2);
-        timer = 0;
-        player = null;
-        simpleInitApp();
-
-//        main(null);
-
     }
-
+    
     private void createPhisics() {
         state = new BulletAppState();
         stateManager.attach(state);
@@ -325,8 +276,6 @@ public class Main extends SimpleApplication implements ActionListener, PhysicsCo
     public void collision(PhysicsCollisionEvent event) {
         Spatial nodeA = event.getNodeA();
         Spatial nodeB = event.getNodeB();
-
-        nodeB = event.getNodeB();
 
         if (nodeA.getName().equals("player") && nodeB.getName().equals("car")) {
             rootNode.detachChildNamed("carNode");

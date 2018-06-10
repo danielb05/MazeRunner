@@ -15,7 +15,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 
 /**
- * @authors Emanuel(150329) e Daniel(132118) *
+ * 
+ * @authors Emanuel(150329) e Daniel(132118)
  *
  */
 public class PlayerCameraNode extends Node {

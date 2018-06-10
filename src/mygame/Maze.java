@@ -1,5 +1,10 @@
 package mygame;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  *
  * @authors Emanuel(150329) e Daniel(132118) 
@@ -120,8 +125,8 @@ public class Maze {
                    {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
                    {1,0,3,0,1,0,1,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,1,0,1,1,0,0,1,0,1},
                    {1,0,1,0,0,0,0,1,0,0,1,1,1,1,0,1,1,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,1,0,0,1},
-                   {1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,1,1,0,0,0,1},
-                   {1,0,1,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1},
+                   {1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,1},
+                   {1,0,1,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,1,1,0,0,1,0,0,2,0,0,0,1,0,1},
                    {1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,1,0,1},
                    {1,0,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,0,1,0,1},
                    {1,0,1,1,0,1,0,1,1,0,0,1,1,0,0,0,1,1,0,0,0,1,0,0,0,1,1,1,1,0,1,0,1,0,1,0,1,1,0,1},
@@ -171,6 +176,65 @@ public class Maze {
         this.maze = maze;
     }
     
+    public boolean breadthFirstSearch(int bi, int bj) {
+        AbstractMap.SimpleEntry begin = new AbstractMap.SimpleEntry(bi, bj);
+        ArrayList<AbstractMap.SimpleEntry> visiteds = new ArrayList<>();
+        Queue<AbstractMap.SimpleEntry> Q = new LinkedList();
+
+        Q.add(begin);
+
+        while (Q.size() > 0) {
+            AbstractMap.SimpleEntry actual = Q.remove();
+            visiteds.add(actual);
+
+            if (maze[(int) actual.getKey()][(int) actual.getValue()] == 2) {
+                return true;
+            }
+
+            if ((int) actual.getKey() + 1 < maze.length
+                    && !isVisited(visiteds, (int) actual.getKey() + 1, (int) actual.getValue())
+                    && maze[(int) actual.getKey() + 1][(int) actual.getValue()] != 1) {
+
+                Q.add(new AbstractMap.SimpleEntry((int) actual.getKey() + 1, (int) actual.getValue()));
+
+            }
+
+            if ((int) actual.getKey() - 1 >= 0
+                    && !isVisited(visiteds, (int) actual.getKey() - 1, (int) actual.getValue())
+                    && maze[(int) actual.getKey() - 1][(int) actual.getValue()] != 1) {
+
+                Q.add(new AbstractMap.SimpleEntry((int) actual.getKey() - 1, (int) actual.getValue()));
+
+            }
+
+            if ((int) actual.getValue() + 1 < maze.length
+                    && !isVisited(visiteds, (int) actual.getKey(), (int) actual.getValue() + 1)
+                    && maze[(int) actual.getKey()][(int) actual.getValue() + 1] != 1) {
+
+                Q.add(new AbstractMap.SimpleEntry((int) actual.getKey(), (int) actual.getValue() + 1));
+
+            }
+
+            if ((int) actual.getValue() - 1 >= 0
+                    && !isVisited(visiteds, (int) actual.getKey(), (int) actual.getValue() - 1)
+                    && maze[(int) actual.getKey()][(int) actual.getValue() - 1] != 1) {
+
+                Q.add(new AbstractMap.SimpleEntry((int) actual.getKey(), (int) actual.getValue() - 1));
+
+            }
+        }
+
+        return false;
+    }
     
+    private boolean isVisited(ArrayList<AbstractMap.SimpleEntry> lst, int begin, int end) {
+        for (AbstractMap.SimpleEntry e : lst) {
+            if ((int) e.getKey() == begin && (int) e.getValue() == end) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
 }
